@@ -1,0 +1,45 @@
+﻿@model GuestDialog2.Models.Messages
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+
+
+<div>
+   
+ 
+    <dl class="row">
+        <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.user.Login)
+        </dt>
+      
+        <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.user.Login)
+        </dd>
+        <hr />
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.message)
+        </dt>
+        
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.message)
+        </dd>
+        <hr />
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.mark)
+        </dt>
+    
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.mark)
+        </dd>
+        <hr />
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Datetime)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Datetime)
+        </dd>
+    </dl>
+</div>
+

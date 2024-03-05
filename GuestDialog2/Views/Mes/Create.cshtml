@@ -1,0 +1,58 @@
+﻿@model GuestDialog2.Models.Messages
+
+@{
+    ViewData["Title"] = "Create";
+    string a = Context.Session.GetString("Login");
+    int b = 0;
+    int.TryParse(Context.Session.GetString("Id"), out b);
+
+}
+
+
+<div class="row">
+    <div class="col-md-4">
+        
+        <h4>Привет, @a</h4>
+        <form asp-action="Create">
+            <input type="hidden" id="hdn-mes-id" />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="UserId" value="@Context.Session.GetString("Id")" />
+                <div class="form-group">
+                    <label class="control-label">Логин пользователя</label>
+                    <input class="form-control login" input type="text" readonly value="@a" />
+                    <span asp-validation-for="UserId" class="text-danger"></span>
+                </div>
+
+
+
+            <div class="form-group">
+                <label asp-for="message" class="control-label"></label>
+                <input asp-for="message" class="form-control" />
+                <span asp-validation-for="message" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="mark" class="control-label"></label>
+                <input asp-for="mark" class="form-control" />
+                <span asp-validation-for="mark" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Datetime" class="control-label"></label>
+                <input asp-for="Datetime" class="form-control" />
+                <span asp-validation-for="Datetime" class="text-danger"></span>
+            </div>
+          @*   <div class="form-group buttons">
+                <input type="submit" value="Отправить" class="btn" />
+            </div> *@
+        </form>
+    </div>
+</div>
+
+@* <div class="buttons">
+    <a asp-action="Index">Назад</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+ *@

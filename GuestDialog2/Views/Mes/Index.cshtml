@@ -1,0 +1,248 @@
+﻿@model IEnumerable<GuestDialog2.Models.Messages>
+
+@{
+	ViewData["Title"] = "Index";
+	string a = Context.Session.GetString("Login");
+	
+	int b = 0;
+	int.TryParse(Context.Session.GetString("Id"), out b);
+	string getActive()
+	{
+
+		if (a == null)
+			return "active";
+		return "";
+	}
+}
+
+<h1>Гостевая книга отеля Azurre</h1>
+
+
+<div class="total">
+
+	<div id="start">
+		<p>Чтобы добавить отзыв вам нужно</p>
+		<p>
+			<a asp-controller="User" asp-action="Login" class="createDialog hiddenButton" style="color:brown" id="loginW" data-dialog-title="Введите данные">Войти</a>
+		<p>или</p> 
+		<a asp-controller="User" asp-action="Register" class="createDialog" style="color:brown" id="regW" data-dialog-title="Введите данные">Зарегистрироваться</a>
+		</p>
+	
+		<div class="img" enctype="multipart/form-data">
+			<img src="~/img/hotel.jpg" alt="main">
+			<div />
+			<div class="btn1 @getActive()">
+				<p>
+					<a asp-action="Create" asp-controller="Mes" class="createDialog" style="color:brown" id="CreateW" data-dialog-title="Новый отзыв">Добавить отзыв</a>
+				</p><div />
+			</div>
+		</div>
+
+
+		<div id="start2">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>
+
+							@Html.DisplayNameFor(model => model.user.Login)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.message)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.mark)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.Datetime)
+						</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var item in Model)
+					{
+						<tr>
+							<td>
+								@Html.DisplayFor(modelItem => item.user.Login)
+							</td>
+							<td>
+								@Html.DisplayFor(modelItem => item.message)
+							</td>
+							<td>
+								@Html.DisplayFor(modelItem => item.mark)
+							</td>
+							<td>
+								@Html.DisplayFor(modelItem => item.Datetime)
+							</td>
+
+							<td>
+								
+
+									<div class="btn1 @getActive()">
+
+								<div id="vhod" class="btn1 @getActive()">
+										@if (item.user.Login == a)
+										{
+											<div class="buttons">
+												<a asp-action="Edit" asp-route-id="@item.Id" class="editDialog" data-dialog-title="Редактирование отзыва">Изменить</a>
+											</div>
+											<br /> <div class="buttons">
+												<a asp-action="Details" asp-route-id="@item.Id" class="viewDialog" data-dialog-title="Детали">Детали</a>
+											</div>
+											<br /> <div class="buttons">
+												<a asp-action="Delete" asp-route-id="@item.Id" class="viewDialog" data-dialog-title="Удаление отзыва">Удалить</a>
+									</div>}
+								</div>
+								<div/>
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+		
+		@section Scripts {
+			<script>
+				$(document).ready(function () {
+
+
+					//ReGISTER
+					$("#regW").on("click", function (e) {
+						e.preventDefault();
+
+						$("<div id='dialogContent'></div>")
+							.addClass("dialog")
+							.appendTo("body")
+							.load(this.href)
+							.dialog({
+								title: $(this).attr("data-dialog-title"),
+								close: function () { $(this).remove() },
+								modal: true,
+								
+								buttons: {
+									"Сохранить": function () {
+										$.ajax({
+											url: "@Url.Action("Register", "User")",
+											type: "POST",
+											data: $('form').serialize(),
+											datatype: "json",
+											success: function (result) {
+
+												$("#dialogContent").html(result);
+											}
+										});
+									}
+								}
+							});
+					});
+					
+					
+					//LOGIN
+					$("#loginW").on("click", function (e) {
+						e.preventDefault();
+
+						$("<div id='dialogContent'></div>")
+							.addClass("dialog")
+							.appendTo("body")
+							.load(this.href)
+							.dialog({
+								title: $(this).attr("data-dialog-title"),
+								close: function () { $(this).remove() },
+								modal: true,
+								buttons: {
+									"Войти": function () {
+										$.ajax({
+											url: "@Url.Action("Login", "User")",
+											type: "POST",
+											data: $('form').serialize(),
+											datatype: "json",
+											success: function (result) {
+
+												$("#dialogContent").html(result);
+											}
+										});
+									}
+								}
+							});
+					});
+					$("#loginW").addClass("hiddenButton");
+					//DETAILES
+					$(".viewDialog").on("click", function (e) {
+						e.preventDefault();
+
+						$("<div id='dialogContent'></div>")
+							.addClass("dialog")
+							.appendTo("body")
+							.dialog({
+								title: $(this).attr("data-dialog-title"),
+								close: function () { $(this).remove() },
+								modal: true
+								
+							})
+							.load(this.href);
+					});
+
+
+					//CREATE
+					$("#CreateW").on("click", function (e) {
+						e.preventDefault();
+
+						$("<div id='dialogContent'></div>")
+							.addClass("dialog")
+							.appendTo("body")
+							.load(this.href)
+							.dialog({
+								title: $(this).attr("data-dialog-title"),
+								close: function () { $(this).remove() },
+								modal: true,
+								buttons: {
+									"Сохранить": function () {
+										$.ajax({
+											url: "@Url.Action("Create", "Mes")",
+											type: "POST",
+											data: $('form').serialize(),
+											datatype: "json",
+											success: function (result) {
+
+												$("#dialogContent").html(result);
+											}
+										});
+									}
+								}
+							});
+					});
+					//UPDATE
+					$(".editDialog").on("click", function (e) {
+						e.preventDefault();
+
+						$("<div id='dialogContent'></div>")
+							.addClass("dialog")
+							.appendTo("body")
+							.load(this.href)
+							.dialog({
+								title: $(this).attr("data-dialog-title"),
+								close: function () { $(this).remove() },
+								modal: true,
+								buttons: {
+									"Сохранить": function () {
+										$.ajax({
+											url: "@Url.Action("Edit", "Mes")",
+											type: "POST",
+											data: $('form').serialize(),
+											datatype: "json",
+											success: function (result) {
+
+												$("#dialogContent").html(result);
+											}
+										});
+									}
+								}
+							});
+					});
+				});
+			</script>
+			@{
+				await Html.RenderPartialAsync("_ValidationScriptsPartial");
+			}
+		}
